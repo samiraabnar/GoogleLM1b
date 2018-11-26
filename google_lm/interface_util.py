@@ -86,6 +86,16 @@ class GoogleLMInterface(object):
     :return:
     """
     # Tokenize characters and words
+    #sentence = sentence.encode('ascii', errors="ignore").decode()
+    new_sentence = ''
+    for i in np.arange(len(sentence)):
+      if ord(sentence[i]) >= 256:
+        new_sentence += '-'
+      else:
+        new_sentence += sentence[i]
+
+    sentence = new_sentence
+    print(sentence)
     word_ids = [self.vocab.word_to_id(w) for w in sentence.split()]
     char_ids = [self.vocab.word_to_char_ids(w) for w in sentence.split()]
 
@@ -96,7 +106,6 @@ class GoogleLMInterface(object):
     for i in xrange(len(word_ids)):
       self.inputs[0, 0] = word_ids[i]
       self.char_ids_inputs[0, 0, :] = char_ids[i]
-
       # Add 'lstm/lstm_0/control_dependency' if you want to dump previous layer
       # LSTM.
       lstm_emb_0, lstm_emb_1 = sess.run([self.tensors['lstm/lstm_0/control_dependency'],
@@ -113,5 +122,5 @@ class GoogleLMInterface(object):
 
 if __name__ == '__main__':
   google_lm = GoogleLMInterface()
-  lstm_0, lstm_1 = google_lm.forward(google_lm.sess, "I am Samira who are you")
+  lstm_0, lstm_1 = google_lm.forward(google_lm.sess, "I am Samira نباینب are you . @ # $ % ^ & * ( ( !")
   print(np.asarray(lstm_0).shape)
