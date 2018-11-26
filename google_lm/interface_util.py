@@ -95,7 +95,6 @@ class GoogleLMInterface(object):
         new_sentence += sentence[i]
 
     sentence = new_sentence
-    print(sentence)
     word_ids = [self.vocab.word_to_id(w) for w in sentence.split()]
     char_ids = [self.vocab.word_to_char_ids(w) for w in sentence.split()]
 
